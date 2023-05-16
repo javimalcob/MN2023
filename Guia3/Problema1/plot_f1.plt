@@ -11,5 +11,5 @@ set term x11 persist
     #plot f1(x) t "f1(x)" 
     plot "f1.dat" u 1:2 t "f1(x)" with linespoints pointtype 0
     replot "f1_lagrange.dat" u 1:2 t "p(x) lagrange f1" with linespoints pointtype 0
-
+    replot "f1_newton.dat" u 1:2 t "p(x) newton f1" with linespoints pointtype 0
 exit
