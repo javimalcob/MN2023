@@ -9,13 +9,15 @@ Area = (b-a)f(a) + (b-a)(f(b) - f(a)) / 2
 ```fortran
 program trapecio
 h = (b-a)/n
-it = (f(a) + f(b)) / 2
+it = (f(a) + f(b)) / 2._wp
 do i = 1, n-1
-    x = a + i*h
-    it = it + f(xi)
+    it = it + f(a + i*h)
 
 end do
 it = it * h
 
 end program trapecio
 ```
+### Lista de Tarea
++ Subrutina Trapecio
++ Subrutina Simpson
