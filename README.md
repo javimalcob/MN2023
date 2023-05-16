@@ -9,7 +9,7 @@ Area = (b-a)f(a) + (b-a)(f(b) - f(a)) / 2
 ```fortran
 program trapecio
 h = (b-a)/n
-It = (f(a) + f(b)) / 2._wp
+it = (f(a) + f(b)) / 2._wp
 do i = 1, n-1
     it = it + f(a + i*h)
 
