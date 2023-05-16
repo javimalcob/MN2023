@@ -21,3 +21,7 @@ end program trapecio
 ### Lista de Tarea
 + Subrutina Trapecio
 + Subrutina Simpson
+
+```bash
+   scp -r dir jluna@surubi:/home/jluna/NM/Guias/Ps
+```
