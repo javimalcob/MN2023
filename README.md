@@ -27,4 +27,4 @@ end program trapecio
    scp -r dir jluna@surubi:/home/jluna/NM/Guias/Ps
    scp jluna@surubi:/path/archivo ./
 ```
-[comandos ssh](https://geekytheory.com/copiar-archivos-a-traves-de-ssh-con-scp/)
+[LINK comandos SSH](https://geekytheory.com/copiar-archivos-a-traves-de-ssh-con-scp/)
