@@ -10,10 +10,10 @@ implicit none
     real(wp), dimension(1:2)                :: alfa
     
     !Inicializacion de las variables
-    h = 1.0_wp
+    h = 0.1_wp
     a = 0.0_wp
     b = 16.0_wp
-    alfa = (/0.0_wp, -4.41199999999_wp/)
+    alfa = (/0.0_wp, 0.0_wp/)
     
     !#################################### METODO DE EULER #####################################################
     !Bloque de procesamiento usando el metodo de Euler para las aproximaciones

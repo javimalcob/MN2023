@@ -50,7 +50,7 @@ contains  !<<<<<<!!COOOOOOOOOOOONNNNNNNNTAAAAAAAAAAAAIIIIIIIIIINNNNNNNSSSSSSSSSS
             write(fu, *) t,  w(1), w(2)
             
             main_do: do while (abs(t) < abs(b))
-                w = w + h * F1(t, w) !calcula wi ,cada elemento de w es una EDO-1          
+                w = w + h * F(t, w) !calcula wi ,cada elemento de w es una EDO-1          
                 t = a + i*h          !calcula ti
                 write(fu, *) t , w(1), w(2)
                 i = i + 1   
@@ -83,7 +83,7 @@ contains  !<<<<<<!!COOOOOOOOOOOONNNNNNNNTAAAAAAAAAAAAIIIIIIIIIINNNNNNNSSSSSSSSSS
         real(wp), dimension(1:2)                :: w  !almacena las sucesiva aproximaciones wi
         real(wp), dimension(1:2)                :: k 
         integer(il)                             :: i, fu
-        character(80), parameter                :: archivo = 'salida_rk2_vect.dat'
+        character(80), parameter                :: archivo = 'salida_rk2_vectorial.dat'
         !--------------------------------------------------------------------------------------
         !Inicializacion de variables
         

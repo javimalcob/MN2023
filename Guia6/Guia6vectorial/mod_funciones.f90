@@ -5,24 +5,24 @@ contains
 
 
     !-----------------------------------------------------------------------------------------------
+    !function F(t, y)
+    !   real(wp), intent(in)                                :: t
+    !    real(wp), dimension(1:2), intent(in)                :: y
+    !    real(wp), dimension(1:2)                            :: F
+    !    F(1) = y(2)
+    !    F(2) =  -(g/l) * sin(y(1))
+    !end function F
+    !------------------------------------------------------------------------------------------------
     function F(t, y)
         real(wp), intent(in)                                :: t
         real(wp), dimension(1:2), intent(in)                :: y
         real(wp), dimension(1:2)                            :: F
         F(1) = y(2)
-        F(2) =  -(g/l) * sin(y(1))
-    end function F
-    !------------------------------------------------------------------------------------------------
-    function F1(t, y)
-        real(wp), intent(in)                                :: t
-        real(wp), dimension(1:2), intent(in)                :: y
-        real(wp), dimension(1:2)                            :: F1
-        F1(1) = y(2)
-        F1(2) = -1.0_wp * g * exp((-1.0_wp*t)/af)
+        F(2) = -1.0_wp * g * exp((-1.0_wp*t)/af)
         
         !F1(1) = y(1) + (y(2))**2 - t**3
         !F1(2) = y(2) + (y(1))**3 + cos(t)
-    end function F1
+    end function F
    
    !-------------------------------------------
     real(wp) function y(t)
