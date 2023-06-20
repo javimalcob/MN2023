@@ -17,8 +17,11 @@ contains
         real(wp), intent(in)                                :: t
         real(wp), dimension(1:2), intent(in)                :: y
         real(wp), dimension(1:2)                            :: F1
-        F1(1) = y(1) + (y(2))**2 - t**3
-        F1(2) = y(2) + (y(1))**3 + cos(t)
+        F1(1) = y(2)
+        F1(2) = -1.0_wp * g * exp((-1.0_wp*t)/af)
+        
+        !F1(1) = y(1) + (y(2))**2 - t**3
+        !F1(2) = y(2) + (y(1))**3 + cos(t)
     end function F1
    
    !-------------------------------------------
