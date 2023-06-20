@@ -53,7 +53,7 @@ implicit none
      !#################################### METODO DE RUNGE-KUTA2 #####################################################
     allocate(ti(0:n), wi(0:n))
     
-    !Bloque de procesamiento usando el metodo de Euler para las aproximaciones
+    !Bloque de procesamiento usando el metodo de Runge kuta orden 2 para las aproximaciones
     call rk2(a, b, n, alfa, ti, wi)
      
     open(newunit=fu, file=file_rk2) 
@@ -63,7 +63,7 @@ implicit none
         end do 
      close(fu)
      
-     !Bloque para comparar aproximaciones de euler con la funcion exacta
+     !Bloque para comparar aproximaciones de Runge Kuta orden 2 con la funcion exacta
      open(newunit=fu, file=file_rk2_func)
         write(fu, *) "        ti        ", "       wi         ", "         yi        ", "     |yi - wi|    "
         do i = 0, n
@@ -76,7 +76,7 @@ implicit none
      !#################################### METODO DE RUNGE-KUTA4 #####################################################
     allocate(ti(0:n), wi(0:n))
     
-    !Bloque de procesamiento usando el metodo de Euler para las aproximaciones
+    !Bloque de procesamiento usando el metodo de Runge Kuta orden 4 para las aproximaciones
     call rk4(a, b, n, alfa, ti, wi)
      
     open(newunit=fu, file=file_rk4) 
@@ -86,7 +86,7 @@ implicit none
         end do 
      close(fu)
      
-     !Bloque para comparar aproximaciones de euler con la funcion exacta
+     !Bloque para comparar aproximaciones de Runge Kuta de orden 4 con la funcion exacta
      open(newunit=fu, file=file_rk4_func)
         write(fu, *) "        ti        ", "       wi         ", "         yi        ", "     |yi - wi|    "
         do i = 0, n

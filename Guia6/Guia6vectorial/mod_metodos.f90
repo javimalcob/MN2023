@@ -6,7 +6,12 @@ implicit none
 contains  !<<<<<<!!COOOOOOOOOOOONNNNNNNNTAAAAAAAAAAAAIIIIIIIIIINNNNNNNSSSSSSSSSS!!!!!!!!!!!! :c
 !^^^^^^^^^^^^^^^^^^^^^ !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 !--------------------------------------------------------------------------------------------------
-    subroutine euler1(a, b, n, alfa,ti, wi)
+    subroutine euler1_vect(a, b, h, alfa)
+        !NOTAS: No se usa n sino h porque puede generar fuentes de error 
+        !guardar todo dentro de la rutina y no en el programa principal porque un vector con 50k de datos ocuparia mucha memoria 
+        !n, ti , wi BORRAR   
+    
+    
         !==Descripcion del metodo de euler==:
             !El metodo obtiene aproximaciones para el problema del valor inicial
             ! y' = f(t,y)  , a <= t <= b  y(a) = alfa
@@ -19,42 +24,42 @@ contains  !<<<<<<!!COOOOOOOOOOOONNNNNNNNTAAAAAAAAAAAAIIIIIIIIIINNNNNNNSSSSSSSSSS
         !Declaracion de dummy varialbes
         real(wp), intent(in)                    :: a    !extremo izquierdo del intervalo     
         real(wp), intent(in)                    :: b    !extremo derecho del intervalo
-        integer(il), intent(in)                 :: n    !numero de intervalos deseado
-        real(wp), intent(in)                    :: alfa !condicion inicial y(a) = alfa
-        real(wp), dimension(0:n), intent(out)   :: ti   !vector ti de los tiempos 
-        real(wp), dimension(0:n), intent(out)   :: wi   !vector wi de las aproximaciones a y(ti)
+        real(wp), intent(in)                    :: h    !tamaño de paso
+        real(wp), dimension(1:2), intent(in)    :: alfa !condicion inicial alfa = (x1_0, x2_0)
+        
              
         !----------------------------------------------------------------------------------    
         !Declaracion de variables auxiliares
         real(wp)                                :: t  !almacena el tiempo ti, con  0<= i <=n
-        real(wp)                                :: w  !almacena las sucesivas aproximaciones wi
-        real(wp)                                :: h  !paso constante del tiempo
-        integer(il)                             :: i
+        real(wp), dimension(1:2)                :: w  !almacena las sucesivas aproximaciones wi
+        integer(il)                             :: i, fu
+        character(80), parameter                :: archivo = 'salida_euler_vectorial.dat'
         !--------------------------------------------------------------------------------------
         !Inicializacion de variables
-        h = (b - a) / n
         t = a
-        w = alfa
-        write(*,*) " h ", " t " , " w "
-        write(*,*) h, t , w
-        ti(0) = t
-        wi(0) = w
+        w(1) = alfa(1)
+        w(2) = alfa(2)
+        write(*,*) " h ", " t " , "   w1   ", "  w2   "
+        write(*,*) h, t , w(1), w(2)
+        i = 1
+        
         !-----------------------------------------------------------------------------------------
         !BLOQUE DE PROCESAMIENTO
-        
-        main_do: do i = 1 , n
-            w = w + h * f(t, w)  !calcula wi
-            t = a + i*h          !calcula ti
-                
-            !Almaceno los resultados en los vectores ti, wi
-            ti(i) = t
-            wi(i) = w
-        end do main_do
-        
-     end subroutine euler1
+        open(newunit=fu, file=archivo)
+            write(fu, *) "            ti            ", "           w1i                ", "      w2i       "
+            write(fu, *) t,  w(1), w(2)
+            
+            main_do: do while (abs(t) < abs(b))
+                w = w + h * F1(t, w) !calcula wi ,cada elemento de w es una EDO-1          
+                t = a + i*h          !calcula ti
+                write(fu, *) t , w(1), w(2)
+                i = i + 1   
+            end do main_do
+        close(fu)
+     end subroutine euler1_vect
      
-     !----------------------------------------------------------------------------------------------- 
-     subroutine rk2(a, b, n, alfa, ti , wi)
+    !----------------------------------------------------------------------------------------------- 
+     subroutine rk2_vect(a, b, h, alfa)
         !==Descripcion del metodo rk2==:
             !El metodo obtiene aproximaciones para el problema del valor inicial
             ! y' = f(t,y)  , a <= t <= b  y(a) = alfa
@@ -69,44 +74,51 @@ contains  !<<<<<<!!COOOOOOOOOOOONNNNNNNNTAAAAAAAAAAAAIIIIIIIIIINNNNNNNSSSSSSSSSS
         !Declaracion de dummy varialbes
         real(wp), intent(in)                    :: a    !extremo izquierdo del intervalo     
         real(wp), intent(in)                    :: b    !extremo derecho del intervalo
-        integer(il), intent(in)                 :: n    !numero de intervalos deseado
-        real(wp), intent(in)                    :: alfa !condicion inicial y(a) = alfa
-        real(wp), dimension(0:n), intent(out)   :: ti   !vector ti de los tiempos 
-        real(wp), dimension(0:n), intent(out)   :: wi   !vector wi de las aproximaciones a y(ti)
+        real(wp), intent(in)                    :: h    !tamaño de paso
+        real(wp), dimension(1:2), intent(in)    :: alfa !vector condicion inicial alfa = (x1_0, x2_0)
+        
         !----------------------------------------------------------------------------------    
         !Declaracion de variables auxiliares
         real(wp)                                :: t  !almacena el tiempo ti, con  0<= i <=n
-        real(wp)                                :: w  !almacena las sucesiva aproximaciones wi
-        real(wp)                                :: h  !paso constante del tiempo
-        real(wp)                                :: k 
-        integer(il)                             :: i
-        
+        real(wp), dimension(1:2)                :: w  !almacena las sucesiva aproximaciones wi
+        real(wp), dimension(1:2)                :: k 
+        integer(il)                             :: i, fu
+        character(80), parameter                :: archivo = 'salida_rk2_vect.dat'
         !--------------------------------------------------------------------------------------
         !Inicializacion de variables
-        h = (b - a) / n
+        
         t = a
-        w = alfa
-        write(*,*) " h ", " t " , " w "
-        write(*,*) h, t , w
-        ti(0) = t
-        wi(0) = w
+        w(1) = alfa(1)
+        w(2) = alfa(2)
+        write(*,*) " h ", " t " , "   w1   ", "  w2   "
+        write(*,*) h, t , w(1), w(2)
+        i = 1
         !-----------------------------------------------------------------------------------------
         !BLOQUE DE PROCESAMIENTO
-        main_do: do i = 1, n
-            k = h * f(t, w)
-            w = w + h*f(t + (h/2.0_wp) , w + (k/2.0_wp))    !calcula wi
-            t = a + i*h                                     !calcula ti
-            !Almacena los resultados en los vectores ti y wi
-            ti(i) = t
-            wi(i) = w
-        end do main_do
+        open(newunit=fu, file=archivo)
+             write(fu, *) "            ti            ", "           w1i                ", "      w2i       "
+            write(fu, *) t,  w(1), w(2)
+            
+            main_do: do while (abs(t) < abs(b))
+                k = h * F(t, w)
+                w = w + h*F(t + (h/2.0_wp) , w + (k/2.0_wp))    !calcula wi
+                t = a + i*h                                     !calcula ti        
+                write(fu, *) t , w(1), w(2)                                 
+                i = i + 1
+            end do main_do
+        close(fu)
         !-----------------------------------------------------------------------------------------
      
-     end subroutine rk2   
+     end subroutine rk2_vect
      
        
     !----------------------------------------------------------------------------------------------- 
-     subroutine rk4(a, b, n, alfa, ti , wi)
+    !#################################################################################################
+    !###############METODO DE RUNGE-KUTTA PARA SISTEMAS DE ECUACIONES DIFERENCIALES###################
+    !#################################################################################################
+    !------------------------------------------------------------------------------------------------
+    
+     subroutine rk4_vect(a, b, h, alfa)
         !==Descripcion del metodo rk4==:
             !El metodo obtiene aproximaciones para el problema del valor inicial
             ! y' = f(t,y)  , a <= t <= b  y(a) = alfa
@@ -124,44 +136,45 @@ contains  !<<<<<<!!COOOOOOOOOOOONNNNNNNNTAAAAAAAAAAAAIIIIIIIIIINNNNNNNSSSSSSSSSS
         !Declaracion de dummy varialbes
         real(wp), intent(in)                    :: a    !extremo izquierdo del intervalo     
         real(wp), intent(in)                    :: b    !extremo derecho del intervalo
-        integer(il), intent(in)                 :: n    !numero de intervalos deseado
-        real(wp), intent(in)                    :: alfa !condicion inicial y(a) = alfa
-        real(wp), dimension(0:n), intent(out)   :: ti   !vector ti de los tiempos 
-        real(wp), dimension(0:n), intent(out)   :: wi   !vector wi de las aproximaciones a y(ti)
+        real(wp), intent(in)                    :: h    !tamaño de paso
+        real(wp), dimension(1:2), intent(in)    :: alfa !vector condicion inicial alfa = (x1_0, x2_0)
+        
         !----------------------------------------------------------------------------------    
         !Declaracion de variables auxiliares
         real(wp)                                :: t  !almacena el tiempo ti, con  0<= i <=n
-        real(wp)                                :: w  !almacena las sucesiva aproximaciones wi
-        real(wp)                                :: h  !paso constante del tiempo
-        real(wp)                                :: k1, k2, k3 , k4
-        integer(il)                             :: i
+        real(wp), dimension(1:2)                :: w  !almacena las sucesiva aproximaciones wi
+        real(wp), dimension(1:2)                :: k1, k2, k3 , k4
+        integer(il)                             :: i, j, fu
+        character(80), parameter                :: archivo = 'salida_rk4_vectorial.dat'
         !--------------------------------------------------------------------------------------
         !Inicializacion de variables
-        h = (b - a) / n
         t = a
-        w = alfa
-        write(*,*) " h ", " t " , " w "
-        write(*,*) h, t , w
-        ti(0) = t
-        wi(0) = w
+        w(1) = alfa(1)
+        w(2) = alfa(2)
+        write(*,*) " h ", " t " , "   w1   ", "  w2   "
+        write(*,*) h, t , w(1), w(2)
+        i = 1
         !-----------------------------------------------------------------------------------------
         !BLOQUE DE PROCESAMIENTO
-        main_do: do i = 1, n
-            k1 = h * f(t, w)
-            k2 = h * f(t + (h/2.0_wp), w + (1.0_wp/2.0_wp) * k1 )
-            k3 = h * f(t + (h/2.0_wp), w + (1.0_wp/2.0_wp) * k2 )
-            k4 = h * f(t + h, w + k3)
-            w = w + (1.0_wp/6.0_wp)*(k1 + 2.0_wp * k2 + 2.0_wp* k3 + k4)  !calcula wi
-            t = a + i*h                                                   !calcula ti
-            !Almacena los resultados en los vectores ti y wi
-            ti(i) = t
-            wi(i) = w
+        open(newunit=fu, file=archivo)
+             write(fu, *) "            ti            ", "           w1i                ", "      w2i       "
+            write(fu, *) t,  w(1), w(2)
+            main_do: do while (abs(t) < abs(b))
+                k1 = h * F(t, w)
+                k2 = h * F(t + (h/2.0_wp), w + (1.0_wp/2.0_wp) * k1 )
+                k3 = h * F(t + (h/2.0_wp), w + (1.0_wp/2.0_wp) * k2 )
+                k4 = h * F(t + h, w + k3)
+                w = w + (1.0_wp/6.0_wp)*(k1 + 2.0_wp * k2 + 2.0_wp* k3 + k4)  !calcula wi
+                t = a + i*h                                                   !calcula ti
+                write(fu, *) t , w(1), w(2)
+                i = i + 1
         end do main_do
+        close(fu)
         !-----------------------------------------------------------------------------------------
-     end subroutine rk4  
-        
+     end subroutine rk4_vect  
 end module metodos
-
+     
+  
 
 
 
