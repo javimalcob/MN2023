@@ -41,7 +41,7 @@ contains  !<<<<<<!!COOOOOOOOOOOONNNNNNNNTAAAAAAAAAAAAIIIIIIIIIINNNNNNNSSSSSSSSSS
         end do init_w
         
         write(*,*) " h ", " t " , "   w1   ", "  w2   "
-        write(*,*) h, t , w(1), w(2)
+        write(*,*) h, t , w(1), w(2) !do implicito!
         i = 1
         !-----------------------------------------------------------------------------------------
         !BLOQUE DE PROCESAMIENTO

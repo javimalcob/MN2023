@@ -4,15 +4,10 @@ use funciones
 use metodos
 implicit none
     !Declaracion de variables
-    real(wp)                                :: a
-    real(wp)                                :: b
-    real(wp)                                :: h
-    real(wp), dimension(1:2)                :: alfa
-    
+    !La declaracion de variables esta en el modulo_prec
+    real(wp), allocatable     :: alfa(:)  
+    allocate(alfa(n))
     !Inicializacion de las variables
-    h = 1.0_wp
-    a = 0.0_wp
-    b = 16.0_wp
     alfa = (/0.0_wp, 0.0_wp/)
     
     !#################################### METODO DE EULER #####################################################
@@ -25,4 +20,5 @@ implicit none
     !Bloque de procesamiento usando el metodo de Runge Kuta orden 4 para las aproximaciones
     call rk4_vect(a, b, h, alfa)
     
+    deallocate(alfa)
 end program main
